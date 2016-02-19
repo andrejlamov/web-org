@@ -1,0 +1,202 @@
+<html>
+ <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>Web-Org</title>
+
+    <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='d3.v3.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='socket.io.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='semantic/semantic.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='semantic/semantic.min.css') }}">
+    
+    <style type="text/css">
+     body {
+         min-width: 150px;
+     }
+     .main.container {
+         margin-top: 1em;
+     }
+     .main.header {
+         text-align: center;
+     }
+     .prio.label {
+         margin-left: .5rem;
+     } 
+
+     .ui.horizontal.list>.item {
+         margin-left: 0.5rem;
+     }
+     span.item {
+         margin-left: 0.25rem;
+         margin-right: 0.25rem;
+     }
+     .header {
+         font-size: 1.4rem;
+         font-weight: 300;
+     }
+     .todo {
+         font-size: 1.4rem;
+         font-weight: 300;
+     }
+     .level {
+         font-weight: 700;
+     }
+    </style>
+  </head>
+  <body>
+
+    <div class="ui main container">
+      <h1 class="ui main header">Web-Org</h1>
+    </div>
+  </body>
+  <script>
+   var socket = io.connect('http://' + document.domain + ':' + location.port + '/');
+   socket.on('connect', function(d){
+       socket.emit('bonjour', 'i am here');
+   })
+   
+   var data = {{ data|tojson|safe }};
+
+   data.forEach(function(d) {
+       d['visible'] = true;
+       d['changed'] = false;
+       // editable event will not create paragraphs if the parent div is empty
+       if(d.content.length == 0)
+           d.content = [''];
+       
+   });
+
+   var todocolor = d3.scale.ordinal().domain(['TODO', 'DONE', 'null']).range(['red', 'green', '']);   
+
+
+   update(data);
+   
+   function update() {
+       var list = d3.select('.main.container')
+                    .selectAll('.orgitem')
+                    .data(data);
+       
+       var item = list.enter()
+                      .append('div')
+                      .attr('class', 'orgitem content')
+
+       var header = item.append('div')
+                        .attr('class', 'orgheading');
+
+       
+       header.append('span')
+             .attr('class', 'item level');
+
+       header.append('span')
+             .style('display', 'none')
+             .attr('class', 'item todo')
+             .on('click', function(d) {
+                 d.todo = d.todo == 'TODO' ? 'DONE' : 'TODO';
+                 update();
+                 push();
+             });
+       
+       header.append('a')
+             .style('display', 'none')
+             .attr('class', 'ui tiny prio green label');
+
+           
+       
+       header.append('span')
+             .attr('class', 'item')
+             .attr('contenteditable', 'true')
+             .attr('class', 'item header editable')
+             .on('input', function(d){
+                 d.val = d3.select(this).text();
+                 d.changed = true;
+             })
+             .on('blur', function(d){
+                 if(d.changed) {
+                     update();
+                     push();
+                     d.changed = false;
+                 }
+             });
+
+       
+       item.append('div')
+           .attr('contenteditable', 'true')
+           .attr('class', 'paragraphs')
+           .on('input', function(d){
+               d.content = []
+               d3.select(this)
+                 .selectAll('p')
+                 .each(function() {
+                     d.content.push(d3.select(this).text());
+                 });
+               d.changed = true;
+
+           })
+           .on('blur', function(d){
+               if(d.changed) {
+                   update();
+                   push();
+                   d.changed = false;
+               }
+           });
+
+           
+       list.exit().remove();
+
+       item = d3.selectAll('.orgitem');
+
+       item.select('.level')
+           .text(function(d) {
+             return '*'.repeat(d.level);
+         });
+
+       item.select('.todo')
+           .style('display', function(d) { return d.todo ? '' : 'none'})
+           .style('color', function(d) {
+               return todocolor(d.todo);
+           })
+           .text(function(d) {
+               return d.todo;
+           });
+
+       item.select('.prio')
+           .style('display', function(d) {
+               return d.prio ? '' : 'none';
+           })
+           .text(function(d) {
+               return d.prio;
+           })
+
+       item.select('.header')
+           .text(function(d) {
+               return d.val;
+           });
+
+       
+       var paragraph = item.select('.paragraphs')
+                           .selectAll('p')
+                           .data(function(d) {
+                               return d.content;
+                           });
+       
+       paragraph.enter()
+                .append('p');
+
+       paragraph.exit().remove();
+       
+       d3.selectAll('.content p')
+         .text(function(d) {
+             return d
+         });
+   };
+
+   function push() {
+       socket.emit('data', {data: data});
+   }
+
+  </script>
+</html>

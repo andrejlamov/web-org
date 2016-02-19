@@ -1,0 +1,5 @@
+* TODO Fix full duplex sync
+Changes in the org file should propagate to the connected client.
+
+Hello.
+
