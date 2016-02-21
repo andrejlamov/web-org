@@ -42,8 +42,10 @@
          font-size: 1.4rem;
          font-weight: 300;
      }
-     .level {
-         font-weight: 700;
+
+     .level .icon {
+         margin-right: 0px;
+     }
      }
     </style>
   </head>
@@ -150,8 +152,9 @@
        item = d3.selectAll('.orgitem');
 
        item.select('.level')
-           .text(function(d) {
-             return '*'.repeat(d.level);
+           .html(function(d) {
+               var asterisk = '<i class="tiny icon asterisk"></i>';
+               return asterisk.repeat(d.level);
          });
 
        item.select('.todo')
