@@ -1,5 +1,6 @@
-* TODO Fix full duplex sync
-Changes in the org file should propagate to the connected client.
-
-Hello.
+* TODO Write thesis
+Type on keyboard, think about stuff.
+* TODO Learn org-mode
+** TODO Do web-org
+* TODO Eat chicken
 

@@ -194,6 +194,12 @@
          });
    };
 
+   socket.on('data', function(d) {
+       console.log('new data');
+       data = d;
+       update();
+   });
+   
    function push() {
        socket.emit('data', {data: data});
    }
