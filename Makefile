@@ -16,6 +16,7 @@ all: env/bin/python static
 env/bin/python: 
 	curl https://repo.continuum.io/miniconda/$(MINICONDA) -o miniconda.sh
 	sh miniconda.sh -b -p ./env
+	env/bin/pip install --upgrade pip
 	env/bin/pip install -r requirements.txt
 
 static: 
