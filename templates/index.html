@@ -48,7 +48,12 @@
      }
 
      .orgheading {
-         margin-top: .5em
+         margin-top: .5em;
+         margin-bottom: .5em;
+     }
+
+     .paragraphs {
+         margin-left: .5rem;
      }
     </style>
   </head>
@@ -156,7 +161,7 @@
 
        item.select('.level')
            .html(function(d) {
-               var asterisk = '<i class="tiny icon asterisk"></i>';
+               var asterisk = '<i class="icon asterisk"></i>';
                return asterisk.repeat(d.level);
          });
 
