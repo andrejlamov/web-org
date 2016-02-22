@@ -1,0 +1,51 @@
+body {
+    min-width: 150px;
+}
+
+.main.container {
+    margin-top: 1em;
+}
+
+.main.header {
+    text-align: center;
+}
+
+.prio.label {
+    margin-left: .5rem;
+} 
+
+.ui.horizontal.list>.item {
+    margin-left: 0.5rem;
+}
+
+span.item {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+}
+
+.header {
+    font-size: 1.4rem;
+    font-weight: 300;
+}
+
+.todo {
+    font-size: 1.4rem;
+    font-weight: 300;
+}
+
+.level .icon {
+    margin-right: 0px;
+}
+
+.orgheading {
+    margin-top: .5em;
+    margin-bottom: .5em;
+}
+
+.paragraphs {
+    margin-left: .5rem;
+}
+
+p,span,h {
+    white-space: pre-wrap;
+}
