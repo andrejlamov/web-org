@@ -41,6 +41,7 @@ def data(data):
 @socketio.on('bonjour')
 def bonjour(msg):
     print 'Client connected'
+    emit("data", pyorg.parseorg('example.org'))
 
 if __name__ == "__main__":
     thread = threading.Thread(target = watch)

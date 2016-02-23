@@ -23,11 +23,7 @@
     </div>
   </body>
   <script>
-   var socket = io.connect('http://' + document.domain + ':' + location.port + '/');
-   socket.on('connect', function(d){
-       socket.emit('bonjour', 'i am here');
-   })
-   
+  
    var data = {{ data|tojson|safe }};
 
    function preprocess() {
@@ -165,6 +161,12 @@
              return d
          });
    };
+
+   var socket = io.connect('http://' + document.domain + ':' + location.port + '/');
+
+   socket.on('connect', function(d){
+       socket.emit('bonjour', 'i am here');
+   })
 
    socket.on('data', function(d) {
        console.log('new data');
