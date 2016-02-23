@@ -49,3 +49,7 @@ span.item {
 p,span,h {
     white-space: pre-wrap;
 }
+
+p {
+    margin-bottom: .25em
+}
