@@ -20,7 +20,8 @@ env/bin/python:
 	env/bin/pip install -r requirements.txt
 
 static: 
-	mkdir -p static static/semantic static/medium
+	mkdir -p static static/semantic
+	ln -sf ../templates/index.css static/index.css
 	curl https://codeload.github.com/Semantic-Org/Semantic-UI-CSS/tar.gz/$(SEM_TAG) | tar xzv -C static/semantic --strip-components=1
 	cd static && curl  http://code.jquery.com/jquery-$(JQ_VER).min.js -o jquery.min.js
 	cd static && curl -O http://d3js.org/d3.v3.min.js
