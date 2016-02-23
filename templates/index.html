@@ -33,10 +33,6 @@
    data.forEach(function(d) {
        d['visible'] = true;
        d['changed'] = false;
-       // editable event will not create paragraphs if the parent div is empty
-       if(d.content.length == 0)
-           d.content = [''];
-       
    });
 
    var todocolor = d3.scale.ordinal().domain(['TODO', 'DONE', 'null']).range(['red', 'green', '']);   
@@ -95,6 +91,7 @@
        item.append('div')
            .attr('contenteditable', 'true')
            .attr('class', 'paragraphs')
+           .style('display', 'none')
            .on('input', function(d){
                d.content = []
                d3.select(this)
@@ -158,7 +155,9 @@
 
        paragraph.exit().remove();
        
-       d3.selectAll('.content p')
+       d3.selectAll('.paragraphs')
+         .style('display', function(d) { return d.content.length != 0 ? '' : 'none'})
+         .selectAll('p')
          .text(function(d) {
              return d
          });
