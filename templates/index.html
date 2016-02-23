@@ -30,15 +30,18 @@
    
    var data = {{ data|tojson|safe }};
 
-   data.forEach(function(d) {
-       d['visible'] = true;
-       d['changed'] = false;
-   });
+   function preprocess() {
+       data.forEach(function(d) {
+           d['visible'] = true;
+           d['changed'] = false;
+       });
+   }
 
    var todocolor = d3.scale.ordinal().domain(['TODO', 'DONE', 'null']).range(['red', 'green', '']);   
 
 
-   update(data);
+   preprocess();
+   update();
    
    function update() {
        var list = d3.select('.main.container')
@@ -166,6 +169,7 @@
    socket.on('data', function(d) {
        console.log('new data');
        data = d;
+       preprocess();
        update();
    });
    
